@@ -1,19 +1,83 @@
 ---
-title       : Car Trend
-subtitle    : Car MPG Estimator
-author      : Sasidhar Donaparthi 
+title       : Car Trends
+subtitle    : Predict Your Car Milage
+author      : Sasidhar Donaparthi
 job         : 
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : tomorrow      # 
-widgets     : []            # {mathjax, quiz, bootstrap}
+widgets     : [bootstrap]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 ---
 
 ## Objective
 
-1. Find out you car parameters
-2. Key them in the estimate
-3. Get the MPG value
+Objective of this presentation is provide to update on following after analyzing the The data was extracted from the 1974 _Motor Trend_ US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models). 
+
+* Exploratory Analysis
+* Fit a Liner model to estimate the miles/(US) gallon
+* Summary
+    
+### Data Points
+
+<u>mpg</u> : Miles/(US) gallon,  <u>cyl</u> : Number of cylinders, <u>disp</u> : Displacement (cu.in.)
+<br><u>hp</u> : Gross horsepower,<u>drat</u> : Rear axle ratio, <u>wt</u> : Weight (lb/1000)
+<br><u>qsec</u> : 1/4 mile time,<u>vs</u> : V/S, <u>am</u> : Transmission (0 = automatic, 1 = manual)
+<br><u>gear</u> : Number of forward gears, <u>carb</u> : Number of carburetors
+
+---
+
+## Exploratory Analysis
+Follwing charts shows the relationship between various predictors and the outcome miles/(US) gallon
+
+```{r echo=FALSE,results='asis',fig.width=10, fig.height=6.5}
+data(mtcars)
+mydata <- mtcars
+par(mfrow=c(2,2))
+plot(mtcars$wt,mtcars$mpg,xlab="Weight in 1000 lbs",ylab="miles/(US) gallon",pch=21,col="blue")
+plot(mtcars$hp,mtcars$mpg,xlab="Gross Horse Power(hp)",ylab="miles/(US) gallon",pch=21,col="blue")
+plot(mtcars$cyl,mtcars$mpg,xlab="Number of Cylinders",ylab="miles/(US) gallon",pch=21,col="blue")
+plot(mtcars$disp,mtcars$mpg,xlab="Displacement (cu. in.)",ylab="miles/(US) gallon",pch=21,col="blue")
+```
+
+---
+
+## Linear Model
+
+We use number of cylenders, horse power, weight as the <em>predictors</em> and the <em>outcome</em> as miles/(US) gallon
+```{r echo=FALSE, results='hide', eval=TRUE}
+corcoef <- cor(mtcars$cyl,mtcars$disp)
+```
+Displacement has a strong relationship with number of cylinders, corelation coffecient = `r corcoef`
+Let's consider # of clylinders instead of displacement.
+
+Here is our model
+
+```{r echo=FALSE, results='hide', eval=TRUE}
+library(caret)
+set.seed(12345)
+intrain = createDataPartition(mydata$mpg,p=0.7,list=FALSE)
+training = mydata[intrain,]
+testing = mydata[-intrain,]
+dim(training);dim(testing)
+```
+```{r echo=TRUE, results='hide', eval=TRUE}
+modFit <- train(mpg ~ cyl + wt + hp + am, method="lm",data=training)
+mpg_predict <- predict(modFit,newdata=testing)
+```
+
+---
+
+## Summary
+
+*  All of the predictors have negative relationship with miles/(US) gallon
+*  Holdinng all other predictors constatnt, Automatic transmission is more effecient than manual transition
+
+You can use <a href="http://sdonapar.shinyapps.io/myshinyapp">"Predict Your Car Milage"</a> for interactive application
+
+
+```{r, echo=FALSE}
+
+```
 

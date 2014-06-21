@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Car Trend</title>
+  <title>Car Trends</title>
   <meta charset="utf-8">
-  <meta name="description" content="Car Trend">
+  <meta name="description" content="Car Trends">
   <meta name="author" content="Sasidhar Donaparthi">
   <meta name="generator" content="slidify" />
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,7 +13,8 @@
     media="only screen and (max-device-width: 480px)" >
   <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
   <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
-  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="libraries/widgets/bootstrap/css/bootstrap.css"></link>
+<link rel=stylesheet href="./assets/css/ribbons.css"></link>
 
   
   <!-- Grab CDN jQuery, fall back to local if offline -->
@@ -32,8 +33,8 @@
     <!-- LOGO SLIDE -->
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
-    <h1>Car Trend</h1>
-    <h2>Car MPG Estimator</h2>
+    <h1>Car Trends</h1>
+    <h2>Predict Your Car Milage</h2>
     <p>Sasidhar Donaparthi<br/></p>
   </hgroup>
   <article></article>  
@@ -46,11 +47,73 @@
     <h2>Objective</h2>
   </hgroup>
   <article data-timings="">
-    <ol>
-<li>Find out you car parameters</li>
-<li>Key them in the estimate</li>
-<li>Get the MPG value</li>
-</ol>
+    <p>Objective of this presentation is provide to update on following after analyzing the The data was extracted from the 1974 <em>Motor Trend</em> US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973-74 models). </p>
+
+<ul>
+<li>Exploratory Analysis</li>
+<li>Fit a Liner model to estimate the miles/(US) gallon</li>
+<li>Summary</li>
+</ul>
+
+<h3>Data Points</h3>
+
+<p><u>mpg</u> : Miles/(US) gallon,  <u>cyl</u> : Number of cylinders, <u>disp</u> : Displacement (cu.in.)
+<br><u>hp</u> : Gross horsepower,<u>drat</u> : Rear axle ratio, <u>wt</u> : Weight (lb/1000)
+<br><u>qsec</u> : 1/4 mile time,<u>vs</u> : V/S, <u>am</u> : Transmission (0 = automatic, 1 = manual)
+<br><u>gear</u> : Number of forward gears, <u>carb</u> : Number of carburetors</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Exploratory Analysis</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Follwing charts shows the relationship between various predictors and the outcome miles/(US) gallon</p>
+
+<p><img src="assets/fig/unnamed-chunk-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Linear Model</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>We use number of cylenders, horse power, weight as the <em>predictors</em> and the <em>outcome</em> as miles/(US) gallon</p>
+
+<p>Displacement has a strong relationship with number of cylinders, corelation coffecient = 0.902
+Let&#39;s consider # of clylinders instead of displacement.</p>
+
+<p>Here is our model</p>
+
+<pre><code>## Loading required package: lattice
+## Loading required package: ggplot2
+</code></pre>
+
+<pre><code class="r">modFit &lt;- train(mpg ~ cyl + wt + hp + am, method = &quot;lm&quot;, data = training)
+mpg_predict &lt;- predict(modFit, newdata = testing)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Summary</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li> All of the predictors have negative relationship with miles/(US) gallon</li>
+<li> Holdinng all other predictors constatnt, Automatic transmission is more effecient than manual transition</li>
+</ul>
+
+<p>You can use <a href="http://sdonapar.shinyapps.io/myshinyapp">&quot;Predict Your Car Milage&quot;</a> for interactive application</p>
 
   </article>
   <!-- Presenter Notes -->
@@ -66,6 +129,24 @@
          1
       </a>
     </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Exploratory Analysis'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Linear Model'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Summary'>
+         4
+      </a>
+    </li>
   </ul>
   </div>  <!--[if IE]>
     <script 
@@ -75,7 +156,15 @@
   <![endif]-->
 </body>
   <!-- Load Javascripts for Widgets -->
-  
+  <script src="libraries/widgets/bootstrap/js/bootstrap.min.js"></script>
+<script src="libraries/widgets/bootstrap/js/bootbox.min.js"></script>
+
+  <script>  
+  $(function (){ 
+    $("#example").popover(); 
+    $("[rel='tooltip']").tooltip(); 
+  });  
+  </script>  
   <!-- LOAD HIGHLIGHTER JS FILES -->
   <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
